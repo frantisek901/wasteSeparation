@@ -27,6 +27,7 @@ globals [
   end? ;; stores TRUE if conditions for finishing simulation are satisfied
   globalDiffSorting ;; indicator of quality of model fit to ISSP data
   individualDiffSorting ;; secondary indicator of model fit
+  feedingOrder
 ]
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; reporters substituting globals ;;;;
@@ -105,6 +106,7 @@ to turtle-setup
 
   ;; Loading data in turtles after creating of small-world network
   ifelse ( file-exists? "dataMisa4.txt" ) [
+    file-close
     file-open "dataMisa4.txt"       ;; NOTE: DataMisa4.txt are sorted according Attitude,
     ifelse not homophily? [
       ask turtles [
@@ -113,11 +115,19 @@ to turtle-setup
         set finalSorting file-read
       ]
     ][
-      foreach sort-on [who] turtles [  ;;      that is why we are sorting turtles according WHO,
-        [the-turtle] -> ask the-turtle [ ;;    so the turtles with low WHO have the most pro-sorting attitude
+      set feedingOrder []
+      (foreach (range 0 921) (range 1840 919 -1) [ [a b] -> ;; firstly we have prepare the list od IDs in specified order: on even positions upper half, on odd positions lower half
+        set feedingOrder lput a feedingOrder
+        if b > 920 [set feedingOrder lput b feedingOrder]
+      ])
+      ;print feedingOrder
+      foreach feedingOrder [  ;;      for every ID we find the turtle with respective WHO,
+        [ID] -> ask turtle ID [ ;;    and ask the turtle to feed herself by the data
           set finalBehavior file-read
           set loadedAttitude file-read
           set finalSorting file-read
+          ;fd 0 - loadedAttitude * 35
+          ;print ID
         ]
       ]
     ]
@@ -192,7 +202,7 @@ to go
   check-end
   tick
   if end? [
-    do-regression
+    ;do-regression
     stop
   ]
 end
@@ -880,6 +890,34 @@ homophily?
 0
 1
 -1000
+
+BUTTON
+210
+444
+331
+477
+check homophily
+ask turtles [\n  ;fd 0 - loadedAttitude * 35\n  set color 10 + loadedAttitude * 19.9\n]\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+MONITOR
+46
+444
+210
+489
+% long-time sorting
+100 * mean ([mean record] of turtles)
+1
+1
+11
 
 @#$#@#$#@
 ## Korespondence
