@@ -1,3 +1,5 @@
+extensions [nw]
+
 to test
   print "JUst test!"
 end
