@@ -132,7 +132,7 @@ to turtle-setup
       ]
     ]
     file-close
-  ][user-message "There is no dataMisa4.txt file in current directory!"]
+  ][error "There is no dataMisa4.txt file in current directory!"]
 
 
 
