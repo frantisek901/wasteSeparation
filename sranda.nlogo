@@ -1,7 +1,7 @@
 extensions [nw]
 
 to test
-  print "JUst test!"
+  print "Just test!"
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
