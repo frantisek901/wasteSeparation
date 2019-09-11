@@ -5,7 +5,7 @@ class TestSuite extends FunSuite {
 
   test("test") {
       val workspace = HeadlessWorkspace.newInstance
-      workspace.open("my-model.nlogo")
+      workspace.open("FrantisekProMisuV10.nlogo")
       try {
         workspace.command("test")
       } catch {
