@@ -1,7 +1,10 @@
-extensions [nw]
+extensions [csv]
 
 to test
-  print "Just test!"
+  file-open "dataMisa4.txt"
+  foreach csv:from-file "dataMisa4.txt" [value ->
+    print value
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
