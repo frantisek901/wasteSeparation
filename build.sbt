@@ -15,7 +15,7 @@ downloadFromZip := {
     "table" -> "table-1.3.1.zip",
     "nw" -> "nw-3.7.7.zip",
     "rnd" -> "rnd-3.0.1.zip",
-    "csv" -> "csv-1.1.1.zip"
+    "csv" -> "csv-1.1.1.zip",
     "matrix" -> "matrix-1.1.1.zip"
   )
   for {
