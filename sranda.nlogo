@@ -1,10 +1,11 @@
-extensions [csv]
+extensions [csv nw]
 
 to test
   file-open "dataMisa4.txt"
   foreach csv:from-file "dataMisa4.txt" [value ->
     print value
   ]
+nw:generate-watts-strogatz turtles links 1841 3 0.05
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
