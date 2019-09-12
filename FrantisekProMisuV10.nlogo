@@ -27,7 +27,6 @@ globals [
   end? ;; stores TRUE if conditions for finishing simulation are satisfied
   globalDiffSorting ;; indicator of quality of model fit to ISSP data
   individualDiffSorting ;; secondary indicator of model fit
-  feedingOrder
 ]
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; reporters substituting globals ;;;;
@@ -95,6 +94,13 @@ to turtle-setup
   set-default-shape turtles "circle"
   ask patches [set pcolor white]
 
+  ;; longer turtle procedures - better to separate code to blocks
+  network-generation
+  feeding-turtles-with-data
+  cleaning-turtle-variables
+end
+
+to network-generation
   ;; Generation of Watts-Strogatz small-world network and loading data in turtles
   nw:generate-watts-strogatz turtles links 1841 closeLinks randomLinks [
     fd 35 ;; make a big circle
@@ -103,41 +109,37 @@ to turtle-setup
     set record [] ;; initializing RECORD as a list
     set changed? false
   ]
+end
 
+to feeding-turtles-with-data
   ;; Loading data in turtles after creating of small-world network
   ifelse ( file-exists? "dataMisa4.txt" ) [
     file-close
     file-open "dataMisa4.txt"       ;; NOTE: DataMisa4.txt are sorted according Attitude,
-    ifelse not homophily? [
-      ask turtles [
+
+    ;; firstly we have prepare the list od IDs in specified order: on even positions upper half, on odd positions lower half
+    let feedingOrder [] ;; we need empty variable for feeding it by cycle
+    (foreach (range 0 921) (range 1840 919 -1) [ [a b] ->
+        set feedingOrder lput a feedingOrder
+        if b > 920 [set feedingOrder lput b feedingOrder]
+    ])
+    if not homophily? [ ;; If Homophily? condition is FALSE we have to randomize the order of turtles feeding
+      set feedingOrder shuffle feedingOrder
+    ]
+
+    ;; Secondly, feeding itself
+    foreach feedingOrder [  ;;      for every ID we find the turtle with respective WHO,
+      [ID] -> ask turtle ID [ ;;    and ask the turtle to feed herself by the data
         set finalBehavior file-read
         set loadedAttitude file-read
         set finalSorting file-read
       ]
-    ][
-      set feedingOrder []
-      (foreach (range 0 921) (range 1840 919 -1) [ [a b] -> ;; firstly we have prepare the list od IDs in specified order: on even positions upper half, on odd positions lower half
-        set feedingOrder lput a feedingOrder
-        if b > 920 [set feedingOrder lput b feedingOrder]
-      ])
-      ;print feedingOrder
-      foreach feedingOrder [  ;;      for every ID we find the turtle with respective WHO,
-        [ID] -> ask turtle ID [ ;;    and ask the turtle to feed herself by the data
-          set finalBehavior file-read
-          set loadedAttitude file-read
-          set finalSorting file-read
-          ;fd 0 - loadedAttitude * 35
-          ;print ID
-        ]
-      ]
     ]
     file-close
   ][error "There is no dataMisa4.txt file in current directory!"]
+end
 
-
-
-
-
+to cleaning-turtle-variables
   ;; turtle variables
   ask turtles  [
     if finalSorting > 4 or finalSorting < 1 [die] ;; turtles with no data or without chance to sort die
@@ -193,7 +195,7 @@ to test
     setup
     repeat 120 [go]
   ]
-  print "Test passed!"
+  print "Je to v prdeli... Ale HOVNO! :) Test passed! "
 end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -271,16 +273,13 @@ to choose-cognitive-process
   ;; here we just set value of variable COGNITION according NIT and UI values,
   ;; behavior itself would be chosen elsewhere
   ifelse Nit < tauN [
-    set cognition ifelse-value (Ui > tauU) [comparison] [deliberation]
-  ][set cognition ifelse-value (Ui > tauU) [imitation] [repetition]]
+    set cognition ifelse-value (Ui > tauU) ["do-comparison"] ["do-deliberation"]
+  ][set cognition ifelse-value (Ui > tauU) ["do-imitation"] ["do-repetition"]]
 end
 
 to update-behavior
-  ;; choosing right cognitive routine
-  if cognition = repetition   [do-repetition]
-  if cognition = imitation    [do-imitation]
-  if cognition = deliberation [do-deliberation]
-  if cognition = comparison   [do-comparison]
+  ;; running right cognitive routine, NOTE! the name of the procedure is already stored in COGNITION, we just have to find a way how run the string
+  run cognition
 
   ;; Randomly reversing of planned behavior
   ;; Not only reverse behavior, we have also recalculate NIT of reversed behavior, but may be NOT...
@@ -1773,6 +1772,54 @@ NetLogo 6.1.0
     </enumeratedValueSet>
     <enumeratedValueSet variable="steps">
       <value value="105"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experimentV10" repetitions="1" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count turtles with [simSorting = 1]</metric>
+    <metric>count turtles with [simSorting = 2]</metric>
+    <metric>count turtles with [simSorting = 3]</metric>
+    <metric>count turtles with [simSorting = 4]</metric>
+    <metric>longTimeSorting%</metric>
+    <steppedValueSet variable="RS" first="1" step="1" last="300"/>
+    <enumeratedValueSet variable="pReverseSorting">
+      <value value="0.1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="tauN">
+      <value value="0.4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="tauU">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="closeLinks" first="1" step="1" last="10"/>
+    <enumeratedValueSet variable="randomLinks">
+      <value value="0.1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="randomSeed?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="homophily?">
+      <value value="true"/>
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sigma">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sortingPrice">
+      <value value="1.05"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff12">
+      <value value="0.105"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff23">
+      <value value="0.495"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff34">
+      <value value="0.875"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="steps">
+      <value value="115"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
