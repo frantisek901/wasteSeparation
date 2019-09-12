@@ -193,7 +193,7 @@ end
 to test
   print "Test just has started..."
   let cntr 0
-  let cntr2 - 1
+  let cntr2 -1
   repeat 5 [
     set cntr (cntr + 1)
     print (word "Run: " cntr)
@@ -202,7 +202,7 @@ to test
     repeat 120 [
       print (word "tick: " cntr2)
       go
-      set cntr2 cntr2 + 1
+      set cntr2 (cntr2 + 1)
     ]
   ]
   print "Je to v prdeli... Ale HOVNO! :) Test passed! "
