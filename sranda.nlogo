@@ -1,4 +1,7 @@
-extensions [csv nw]
+extensions [
+  csv
+  nw
+]
 
 to test
   file-open "dataMisa4.txt"
