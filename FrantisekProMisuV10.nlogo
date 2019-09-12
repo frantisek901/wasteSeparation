@@ -193,16 +193,13 @@ end
 to test
   print "Test just has started..."
   let cntr 0
-  let cntr2 -1
   repeat 5 [
     set cntr (cntr + 1)
     print (word "Run: " cntr)
     setup
-    set cntr2 0
     repeat 120 [
-      print (word "tick: " cntr2)
+      print (word "tick: " ticks)
       go
-      set cntr2 (cntr2 + 1)
     ]
   ]
   print "Je to v prdeli... Ale HOVNO! :) Test passed! "
