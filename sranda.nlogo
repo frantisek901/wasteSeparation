@@ -4,6 +4,7 @@ extensions [
 ]
 
 to test
+  ca
   file-open "dataMisa4.txt"
   foreach csv:from-file "dataMisa4.txt" [value ->
     print value
