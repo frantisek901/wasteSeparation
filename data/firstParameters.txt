@@ -1,0 +1,10 @@
+Ne ne ne! Teď je to takto:
+*randomLinks = 0,100*
+*closeLinks = 3 (tj. celkem 6 blízkých vazeb)*
+*tauN = 0,4*
+*tauU = 0,5*
+*pReverseSorting = 0,1*
+*cutoff12 = 0,105 *
+*cutoff23 = 0,495*
+*cutoff34 = 0,875*
+*sortingPrice = 1,05*

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE search SYSTEM "behaviorsearch.dtd">
+<search>
+<bsearchVersionNumber>1.10</bsearchVersionNumber>
+<modelInfo>
+<modelFile>C:\Users\Kalvas\ownCloud\!!!NetLogo\!MisaKudrnacova\FrantisekProMisuV10.nlogo</modelFile>
+<modelSetupCommands>setup</modelSetupCommands>
+<modelStepCommands>go</modelStepCommands>
+<modelStopCondition/>
+<modelStepLimit>110</modelStepLimit>
+<modelMetricReporter>individualDiffSorting</modelMetricReporter>
+<modelMeasureIf>true</modelMeasureIf>
+</modelInfo>
+<fitnessInfo>
+<fitnessMinimized>true</fitnessMinimized>
+<fitnessCollecting>AT_FINAL_STEP</fitnessCollecting>
+<fitnessSamplingReplications>7</fitnessSamplingReplications>
+<fitnessCombineReplications>MEDIAN</fitnessCombineReplications>
+</fitnessInfo>
+<searchSpace>
+<paramSpec>["tauN" [0 0.05 1]]</paramSpec>
+<paramSpec>["tauU" [0 0.05 1]]</paramSpec>
+<paramSpec>["cutoff12" 0.105]</paramSpec>
+<paramSpec>["cutoff23" 0.495]</paramSpec>
+<paramSpec>["cutoff34" 0.875]</paramSpec>
+<paramSpec>["randomLinks" 0.1]</paramSpec>
+<paramSpec>["closeLinks" 3]</paramSpec>
+<paramSpec>["sortingprice" 1.05]</paramSpec>
+<paramSpec>["pReverseSorting" 0.1]</paramSpec>
+<paramSpec>["sigma" 0]</paramSpec>
+<paramSpec>["randomseed?" false]</paramSpec>
+<paramSpec>["rs" 100]</paramSpec>
+<paramSpec>["steps" 105]</paramSpec>
+<paramSpec>["recalculateNit?" true]</paramSpec>
+<paramSpec>["homophily?" false]</paramSpec>
+</searchSpace>
+<searchMethod type="StandardGA">
+<searchMethodParameter name="crossover-rate" value="0.9"/>
+<searchMethodParameter name="mutation-rate" value="0.05"/>
+<searchMethodParameter name="population-model" value="steady-state-replace-worst"/>
+<searchMethodParameter name="population-size" value="50"/>
+<searchMethodParameter name="tournament-size" value="2"/>
+</searchMethod>
+<chromosomeRepresentation type="MixedTypeChromosome"/>
+<caching>true</caching>
+<evaluationLimit>350</evaluationLimit>
+<bestCheckingNumReplications>0</bestCheckingNumReplications>
+</search>
