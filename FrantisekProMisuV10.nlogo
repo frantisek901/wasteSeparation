@@ -170,7 +170,7 @@ to-report satisfaction
   set Nsik normalized (random-normal Nsik sigma)
   set NPik (1 - (abs (attitude - sorting)))
   let Nik (beta * NSik + (1 - beta) * NPik) ;; NSik and NPik weighted by BETA
-  let price ((sortingPrice * sorting) + ((1 - sorting) * 1)) ;; designed that for sorting==no equal to 1, for sorting==yes equal to SortingPrice
+  let price ((sortingPrice * sorting) + (1 - sorting)) ;; designed that for sorting==no equal to 1, for sorting==yes equal to SortingPrice
   set Nik (Nik / price) ;; Nik is weighted by sortingPrice
   set Nik (normalized (Nik)) ;; We check the Nik is in the interval <0 ; 1>, in case not, we cut value to the interval
   report Nik
@@ -191,18 +191,11 @@ to change-colour
 end
 
 to test
-  print "Test just has started..."
-  let cntr 0
   repeat 5 [
-    set cntr (cntr + 1)
-    print (word "Run: " cntr)
     setup
-    repeat 120 [
-      print (word "tick: " ticks)
-      go
-    ]
+    repeat 120 [go]
   ]
-  print "Je to v prdeli... Ale HOVNO! :) Test passed! "
+  print "Test passed! "
 end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -428,7 +421,7 @@ NIL
 NIL
 NIL
 NIL
-1
+0
 
 SLIDER
 18
@@ -469,7 +462,7 @@ tauN
 tauN
 0
 1
-0.4
+0.35
 0.05
 1
 NIL
@@ -723,7 +716,7 @@ INPUTBOX
 1130
 418
 RS
-1.0
+500.0
 1
 0
 Number
@@ -748,7 +741,7 @@ cutoff12
 cutoff12
 0.005
 0.495
-0.105
+0.355
 0.01
 1
 NIL
@@ -763,7 +756,7 @@ cutoff23
 cutoff23
 0.105
 0.895
-0.495
+0.605
 0.01
 1
 NIL
@@ -778,7 +771,7 @@ cutoff34
 cutoff34
 0.505
 0.995
-0.875
+0.805
 0.01
 1
 NIL
@@ -915,7 +908,7 @@ BUTTON
 331
 477
 check homophily
-ask turtles [\n  fd 0 - loadedAttitude * 35\n  set color 10 + loadedAttitude * 19.9\n]\n
+ask turtles [\n  ;bk loadedAttitude * 35\n  set color 10 + loadedAttitude * 9.9\n]\n
 NIL
 1
 T
@@ -1789,12 +1782,13 @@ NetLogo 6.1.0
     <metric>count turtles with [simSorting = 3]</metric>
     <metric>count turtles with [simSorting = 4]</metric>
     <metric>longTimeSorting%</metric>
-    <steppedValueSet variable="RS" first="1" step="1" last="300"/>
+    <metric>globalDiffSorting</metric>
+    <steppedValueSet variable="RS" first="1" step="1" last="500"/>
     <enumeratedValueSet variable="pReverseSorting">
       <value value="0.1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="tauN">
-      <value value="0.4"/>
+      <value value="0.35"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="tauU">
       <value value="0.5"/>
@@ -1817,13 +1811,58 @@ NetLogo 6.1.0
       <value value="1.05"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="cutoff12">
-      <value value="0.105"/>
+      <value value="0.355"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="cutoff23">
-      <value value="0.495"/>
+      <value value="0.605"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="cutoff34">
-      <value value="0.875"/>
+      <value value="0.805"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="steps">
+      <value value="115"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="testOfParamsV10" repetitions="1" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>globalDiffSorting</metric>
+    <steppedValueSet variable="RS" first="1" step="1" last="3000"/>
+    <enumeratedValueSet variable="pReverseSorting">
+      <value value="0.1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="tauN">
+      <value value="0.35"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="tauU">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="closeLinks">
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="randomLinks">
+      <value value="0.1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="randomSeed?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="homophily?">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sigma">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sortingPrice">
+      <value value="1.05"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff12">
+      <value value="0.355"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff23">
+      <value value="0.605"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cutoff34">
+      <value value="0.805"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="steps">
       <value value="115"/>
