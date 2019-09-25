@@ -102,14 +102,15 @@ end
 
 to network-generation
   ;; Generation of Watts-Strogatz small-world network and loading data in turtles
-  nw:generate-watts-strogatz turtles links 1841 closeLinks randomLinks [
+  nw:generate-watts-strogatz turtles links 1841 ifelse-value (differentDegree?) [maxCloseLinks] [closeLinks] randomLinks [ ;; The first part of implementation of switch DIFFERENT-DEGREE?
     fd 35 ;; make a big circle
     set size 1 ;; be small
     set beta precision (random-float 1) 4 ;; set possible variables
     set record [] ;; initializing RECORD as a list
     set changed? false
   ]
-end
+  if differentDegree? [ask n-of (((maxCloseLinks - closeLinks) / maxCloseLinks) * count links) links [die]] ;; The idea of DIFFERENT-DEGREE? is to crate small-world with a lot of links (MAX-CLOSE-LINKS)
+end  ;;  and then randomly cut them to the number according CLOSE-LINKS, so we still receive small-world network, but nodes have different numbers of edges.
 
 to feeding-turtles-with-data
   ;; Loading data in turtles after creating of small-world network
@@ -447,7 +448,7 @@ closeLinks
 closeLinks
 1
 15
-3.0
+5.0
 1
 1
 NIL
@@ -455,9 +456,9 @@ HORIZONTAL
 
 SLIDER
 18
-108
-207
 141
+207
+174
 tauN
 tauN
 0
@@ -470,9 +471,9 @@ HORIZONTAL
 
 SLIDER
 18
-141
-207
 174
+207
+207
 tauU
 tauU
 0
@@ -504,10 +505,10 @@ PENS
 "changed" 1.0 0 -16777216 true "" "plot count turtles with [changed?]"
 
 MONITOR
-128
-400
-210
-445
+125
+416
+207
+461
 N
 count turtles
 0
@@ -532,10 +533,10 @@ NIL
 1
 
 MONITOR
-128
-355
-210
-400
+125
+371
+207
+416
  % long links
 100 * count links with [link-length > 2] / count links
 3
@@ -558,10 +559,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-46
-355
-128
-400
+43
+371
+125
+416
 changed?
 count turtles with [changed?]
 17
@@ -652,10 +653,10 @@ randomSeed?
 -1000
 
 MONITOR
-46
-400
-128
-445
+43
+416
+125
+461
 % sorting
 100 * mean [sorting] of turtles
 1
@@ -682,9 +683,9 @@ PENS
 
 SLIDER
 18
-174
 207
 207
+240
 pReverseSorting
 pReverseSorting
 0
@@ -697,9 +698,9 @@ HORIZONTAL
 
 SLIDER
 18
-207
-207
 240
+207
+273
 sigma
 sigma
 0
@@ -734,9 +735,9 @@ Number
 
 SLIDER
 18
-239
-207
 272
+207
+305
 cutoff12
 cutoff12
 0.005
@@ -749,9 +750,9 @@ HORIZONTAL
 
 SLIDER
 18
-272
-207
 305
+207
+338
 cutoff23
 cutoff23
 0.105
@@ -764,9 +765,9 @@ HORIZONTAL
 
 SLIDER
 18
-305
-207
 338
+207
+371
 cutoff34
 cutoff34
 0.505
@@ -920,10 +921,10 @@ NIL
 1
 
 MONITOR
-46
-444
-210
-489
+43
+460
+207
+505
 % long-time sorting
 longTimeSorting%
 1
@@ -946,6 +947,32 @@ NIL
 NIL
 NIL
 1
+
+SWITCH
+1144
+510
+1275
+543
+differentDegree?
+differentDegree?
+0
+1
+-1000
+
+SLIDER
+18
+108
+207
+141
+maxCloseLinks
+maxCloseLinks
+1
+100
+100.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## PREDECESORS
