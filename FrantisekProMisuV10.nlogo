@@ -103,8 +103,8 @@ end
 to network-generation
   ;; Generation of Watts-Strogatz small-world network and loading data in turtles
   nw:generate-watts-strogatz turtles links 1841 ifelse-value (differentDegree?) [maxCloseLinks] [closeLinks] randomLinks [ ;; The first part of implementation of switch DIFFERENT-DEGREE?
-    fd 35 ;; make a big circle
-    set size 1 ;; be small
+    fd 33 ;; make a big circle
+    set size 5 ;; be big
     set beta precision (random-float 1) 4 ;; set possible variables
     set record [] ;; initializing RECORD as a list
     set changed? false
@@ -284,9 +284,20 @@ to update-behavior
 
   ;; Randomly reversing of planned behavior
   ;; Not only reverse behavior, we have also recalculate NIT of reversed behavior, but may be NOT...
-  if pReverseSorting > random-float 1 [
-    set sorting (1 - sorting)
-    if recalculateNit? [set Nit satisfaction] ;; let us try it and experiment with difference in recalculation - now it seems there is no substantial effect of recalculation...
+  ifelse diffReversion? [
+    if sorting = yes and pReverseSorting > random-float 1 [ ;; Just for start, take it the P-REVERSE-SORTING is only for change from YES to NO, later we might also prepare the other change
+      set sorting no
+      if recalculateNit? [set Nit satisfaction] ;; let us try it and experiment with difference in recalculation - now it seems there is no substantial effect of recalculation...
+    ]
+    if sorting = no and 0.1 > random-float 1 [ ;; Just fr start hard-wired value
+      set sorting yes
+      if recalculateNit? [set Nit satisfaction] ;; let us try it and experiment with difference in recalculation - now it seems there is no substantial effect of recalculation...
+    ]
+  ][
+    if pReverseSorting > random-float 1 [
+      set sorting (1 - sorting)
+      if recalculateNit? [set Nit satisfaction] ;; let us try it and experiment with difference in recalculation - now it seems there is no substantial effect of recalculation...
+    ]
   ]
 end
 
@@ -448,7 +459,7 @@ closeLinks
 closeLinks
 1
 15
-5.0
+3.0
 1
 1
 NIL
@@ -648,7 +659,7 @@ SWITCH
 327
 randomSeed?
 randomSeed?
-0
+1
 1
 -1000
 
@@ -904,12 +915,12 @@ homophily?
 -1000
 
 BUTTON
-210
-444
-331
-477
+43
+505
+144
+538
 check homophily
-ask turtles [\n  ;bk loadedAttitude * 35\n  set color 10 + loadedAttitude * 9.9\n]\n
+ask turtles [\n  ;bk loadedAttitude * 35\n  set color blue - 5 + loadedAttitude * 9.9\n]\n
 NIL
 1
 T
@@ -932,10 +943,10 @@ longTimeSorting%
 11
 
 BUTTON
-331
-444
-394
-477
+144
+505
+207
+538
 NIL
 test
 NIL
@@ -955,7 +966,7 @@ SWITCH
 543
 differentDegree?
 differentDegree?
-0
+1
 1
 -1000
 
@@ -973,6 +984,35 @@ maxCloseLinks
 1
 NIL
 HORIZONTAL
+
+SWITCH
+1144
+542
+1275
+575
+diffReversion?
+diffReversion?
+1
+1
+-1000
+
+PLOT
+210
+445
+656
+595
+Histogram of Network Degree of Turtles
+NIL
+NIL
+0.0
+25.0
+0.0
+10.0
+true
+false
+"set-plot-x-range ((min [count my-links] of turtles) - 1) (1 + max [count my-links] of turtles)" ""
+PENS
+"default" 0.5 1 -16777216 true "" "histogram [count my-links] of turtles"
 
 @#$#@#$#@
 ## PREDECESORS
